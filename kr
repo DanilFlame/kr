@@ -1,0 +1,110 @@
+#include <iostream>
+#include <cmath>
+using namespace std;
+
+class Array{
+
+  private:
+  int n;
+  int *arr;
+
+  public:
+    Array() // конструктор без параметрів
+    {
+       
+    }
+    Array(int N) //конструктор з одним параметром
+    {
+     
+        n = N;
+        arr = new int[n];
+    }
+    void doMass (){ // функція заповненння масиву рандомними значеннями
+    for(int i = 0; i < n; i++)
+    {
+      arr[i] = -10 + rand()% 21;
+    }
+    }
+
+    void getMass (){ // функція вивід масиву
+    for(int i = 0; i < n; i++)
+    {
+      cout << arr[i] << " ";
+    }
+    }
+
+     void square() // 8 варіант - Створити функцію, яка отримує посилання на масив і виконує над його елементами дії, вказані в таблиці.
+    {
+    for(int i = 0; i < n; i++)
+    {
+      if(arr[i] < 0)
+      {
+        arr[i] = pow(arr[i],2); 
+      }
+    }
+    }
+
+    int getn() // функція для виводу значення n
+    {
+     return n;
+    }
+  
+  // Перевантажував я закрите значення n, тобто розмірність массиву, робив це методом дружніх функцій
+   friend Array operator+(const Array &n1, const Array &n2); // дружня функція для +
+   friend Array operator-(const Array &n1, const Array &n2); // дружня функція для -
+   friend Array operator*(const Array &n1, const Array &n2); // дружня функція для *
+
+ ~Array() // деструктор
+ {
+   delete[] arr;
+ }
+};
+
+
+  Array operator+(const Array &n1, const Array &n2)
+  {
+  //Використовуємо конструктор Array та operator+(int, int)
+  // Мы маємо доступ до закрытого члена n,так як ця функція є дружньою классу Array
+	return Array(n1.n + n2.n);
+  }
+
+  Array operator-(const Array &n1, const Array &n2)
+  {
+  //Використовуємо конструктор Array та operator-(int, int)
+  // Мы маємо доступ до закрытого члена n,так як ця функція є дружньою классу Array
+	return Array(n1.n - n2.n);
+  }
+
+  Array operator*(const Array &n1, const Array &n2)
+  {
+  //Використовуємо конструктор Array та operator*(int, int)
+  // Мы маємо доступ до закрытого члена n,так як ця функція є дружньою классу Array
+	return Array(n1.n * n2.n);
+  }
+
+
+
+int main() {
+ srand(time(0));
+
+ // частина перевірки операцій над масивом
+  int size;
+  cout << "Size of massive: ";
+  cin >> size;
+  Array array(size); // задання розміру масиву та запис у N
+  array.doMass(); // створює та заповнює масив значеннями
+  array.getMass(); // виводить масив
+  cout << endl;
+  array.square(); // возводить значення зі знаком - до квадрату
+  array.getMass(); // виводить масив
+
+// Частина перевірки перегрузок
+  Array n1(size);
+  Array n2(size);
+  Array arraySum = n1 + n2;
+  Array arrayMinus = n1 - n2;
+  Array arrayMulti = n1 * n2;
+  cout << "\n\n\nSum N = " << arraySum.getn();
+  cout << "\nMinus N = " << arrayMinus.getn(); 
+  cout << "\nMilti N = " << arrayMulti.getn(); 
+}
